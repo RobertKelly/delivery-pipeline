@@ -10,7 +10,7 @@ RUN apk add --update shadow \
     && groupadd -g 50 staff \
     && usermod -a -G staff jenkins
 
-COPY config/settings.xml /root/.m2/settings.xml
+COPY config/settings.xml /var/jenkins_home/settings.xml
 
-RUN install-plugins.sh antisamy-markup-formatter matrix-auth pipeline-model-definition blueocean
+RUN install-plugins.sh antisamy-markup-formatter matrix-auth pipeline-model-definition pipeline-maven config-file-provider blueocean
 USER jenkins
