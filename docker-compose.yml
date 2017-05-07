@@ -1,0 +1,30 @@
+version: '3.2'
+
+networks:
+  prodnetwork:
+    driver: bridge
+
+services:
+ nexus:
+  image: sonatype/nexus3
+  restart: always
+  networks:
+    - prodnetwork
+  ports:
+    - "18081:8081"
+
+ jenkins:
+  build: ./jenkins
+  ports:
+    - "18080:8080"
+  networks:
+    - prodnetwork
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - $PWD/jenkins_home:/var/jenkins_home
+  #  - /usr/local/bin/docker:/usr/bin/docker
+    - /opt/jenkins/:/var/lib/jenkins/
+  depends_on:
+    - nexus
+  environment:
+    - NEXUS_PORT=8081
